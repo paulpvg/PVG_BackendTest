@@ -1,0 +1,1 @@
+{"uuid":"0c4f6ba6-618b-4f11-975a-ecdac56557d8","name":"Удаление товара - отсутствие ID","children":["369b85f1-6c5f-4103-b652-55e26c94b7e3"],"befores":[{"name":"setUp","status":"passed","stage":"finished","steps":[],"attachments":[],"parameters":[],"start":1641482616405,"stop":1641482616409}],"afters":[],"start":1641482616403,"stop":1641482616429}

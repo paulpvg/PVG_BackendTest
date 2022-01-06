@@ -1,0 +1,1 @@
+{"uuid":"78c05860-faf8-4e39-8d42-241a12be8a88","name":"Изменение товара - ошибочный метод","children":["7efb7f08-b777-4c68-a1ff-b2a490b9f16b"],"befores":[{"name":"setUp","status":"passed","stage":"finished","steps":[],"attachments":[],"parameters":[],"start":1641475617829,"stop":1641475617833}],"afters":[],"start":1641475617825,"stop":1641475617878}

@@ -1,0 +1,1 @@
+{"uuid":"59ff1c7e-c12d-4b98-bb37-2fc8dc98a76d","name":"Удаление товара - невалидный ID","children":["f3e9e6b3-636d-4be3-89e0-a1479f8a69a2"],"befores":[{"name":"setUp","status":"passed","stage":"finished","steps":[],"attachments":[],"parameters":[],"start":1641475331554,"stop":1641475331557}],"afters":[],"start":1641475331553,"stop":1641475331573}

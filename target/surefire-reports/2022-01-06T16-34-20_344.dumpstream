@@ -1,0 +1,24 @@
+# Created at 2022-01-06T16:34:22.377
+SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+
+# Created at 2022-01-06T16:34:22.377
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+
+# Created at 2022-01-06T16:34:22.377
+SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+
+# Created at 2022-01-06T16:34:24.281
+WARNING: An illegal reflective access operation has occurred
+
+# Created at 2022-01-06T16:34:24.281
+WARNING: Illegal reflective access by retrofit2.Platform (file:/D:/Users/Pavel/.m2/repository/com/squareup/retrofit2/retrofit/2.9.0/retrofit-2.9.0.jar) to constructor java.lang.invoke.MethodHandles$Lookup(java.lang.Class,int)
+
+# Created at 2022-01-06T16:34:24.282
+WARNING: Please consider reporting this to the maintainers of retrofit2.Platform
+
+# Created at 2022-01-06T16:34:24.282
+WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
+
+# Created at 2022-01-06T16:34:24.282
+WARNING: All illegal access operations will be denied in a future release
+

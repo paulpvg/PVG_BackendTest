@@ -1,0 +1,1 @@
+{"uuid":"c47c8e31-130b-4019-9a5f-b5cbd23394d8","name":"Просмотр товара - невалидный ID","children":["997e2f76-dab1-4dfd-bf7c-e6fc5e212a58"],"befores":[{"name":"setUp","status":"passed","stage":"finished","steps":[],"attachments":[],"parameters":[],"start":1641475806032,"stop":1641475806039}],"afters":[],"start":1641475806029,"stop":1641475806064}

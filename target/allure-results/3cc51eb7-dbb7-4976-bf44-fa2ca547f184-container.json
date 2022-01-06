@@ -1,0 +1,1 @@
+{"uuid":"3cc51eb7-dbb7-4976-bf44-fa2ca547f184","name":"Добавление нового товара в существующую категорию","children":["fd51329e-e557-407f-aaf6-df64c4b98b17"],"befores":[{"name":"setUp","status":"passed","stage":"finished","steps":[],"attachments":[],"parameters":[],"start":1641475331383,"stop":1641475331386}],"afters":[],"start":1641475331381,"stop":1641475331451}

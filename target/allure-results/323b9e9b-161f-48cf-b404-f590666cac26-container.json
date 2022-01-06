@@ -1,0 +1,1 @@
+{"uuid":"323b9e9b-161f-48cf-b404-f590666cac26","name":"Изменение товара - пустой body","children":["8ea8882b-d624-446f-b50b-3afe05a63ba4"],"befores":[{"name":"setUp","status":"passed","stage":"finished","steps":[],"attachments":[],"parameters":[],"start":1641482616113,"stop":1641482616120}],"afters":[],"start":1641482616112,"stop":1641482616151}

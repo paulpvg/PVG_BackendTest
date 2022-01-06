@@ -1,0 +1,1 @@
+{"uuid":"4d8db64f-38c9-43e9-a4f3-4784e3ac2920","name":"Удаление товара - ошибочный путь","children":["12f2082c-f3aa-4d8b-9718-cfa95b27a6ef"],"befores":[{"name":"setUp","status":"passed","stage":"finished","steps":[],"attachments":[],"parameters":[],"start":1641476066153,"stop":1641476066156}],"afters":[],"start":1641476066151,"stop":1641476066193}

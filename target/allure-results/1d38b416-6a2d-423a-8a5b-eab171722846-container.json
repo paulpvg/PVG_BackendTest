@@ -1,0 +1,1 @@
+{"uuid":"1d38b416-6a2d-423a-8a5b-eab171722846","name":"Добавление нового товара - ошибочный путь","children":["bd9db8f1-f7b6-4526-9c7a-33503ce05f3c"],"befores":[{"name":"setUp","status":"passed","stage":"finished","steps":[],"attachments":[],"parameters":[],"start":1641475331458,"stop":1641475331463}],"afters":[],"start":1641475331456,"stop":1641475331489}

@@ -1,0 +1,1 @@
+{"uuid":"68c31490-b275-44e0-bdc7-df1b62daf87e","name":"Просмотр товара - ошибочный путь","children":["ca3ef3f0-69b0-45ca-aa0e-a74819d9b5eb"],"befores":[{"name":"setUp","status":"passed","stage":"finished","steps":[],"attachments":[],"parameters":[],"start":1641482616203,"stop":1641482616209}],"afters":[],"start":1641482616201,"stop":1641482616229}

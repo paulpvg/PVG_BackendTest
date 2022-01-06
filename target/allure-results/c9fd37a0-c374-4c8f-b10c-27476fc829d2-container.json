@@ -1,0 +1,1 @@
+{"uuid":"c9fd37a0-c374-4c8f-b10c-27476fc829d2","name":"Добавление нового товара - ошибочный метод","children":["f3a1fd84-258a-4604-994a-18a8f9a4b417"],"befores":[{"name":"setUp","status":"passed","stage":"finished","steps":[],"attachments":[],"parameters":[],"start":1641475617176,"stop":1641475617306}],"afters":[],"start":1641475617169,"stop":1641475617362}

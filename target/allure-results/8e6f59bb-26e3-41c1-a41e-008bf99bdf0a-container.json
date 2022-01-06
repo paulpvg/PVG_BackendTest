@@ -1,0 +1,1 @@
+{"uuid":"8e6f59bb-26e3-41c1-a41e-008bf99bdf0a","name":"Просмотр товара - отсутствие ID","children":["f51fac16-bf74-41a6-b021-563a4a788742"],"befores":[{"name":"setUp","status":"passed","stage":"finished","steps":[],"attachments":[],"parameters":[],"start":1641476065942,"stop":1641476065945}],"afters":[],"start":1641476065940,"stop":1641476066019}
