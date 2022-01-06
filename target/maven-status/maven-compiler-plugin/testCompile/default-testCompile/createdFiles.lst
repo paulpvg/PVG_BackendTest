@@ -1,6 +1,4 @@
-ru\gb\openweather\OpenWeatherTest$1.class
-ru\gb\imgur\ImgurTest.class
-ru\gb\openweather\OpenWeatherTest$2.class
-ru\gb\openweather\AbstractTest.class
-ru\gb\imgur\AbstractTest.class
-ru\gb\openweather\OpenWeatherTest.class
+ru\gb\GetCategoryTest.class
+ru\gb\AbstractProductTest.class
+ru\gb\ProductTest.class
+ru\gb\AbstractCategoryTest.class
