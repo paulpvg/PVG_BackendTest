@@ -1,9 +1,15 @@
 D:\Users\Pavel\IdeaProjects\PVG_BackendTest\src\main\java\ru\gb\service\ProductService.java
 D:\Users\Pavel\IdeaProjects\PVG_BackendTest\src\main\java\ru\gb\util\RetrofitUtils.java
-D:\Users\Pavel\IdeaProjects\PVG_BackendTest\src\main\java\ru\gb\util\PrettyLogger.java
-D:\Users\Pavel\IdeaProjects\PVG_BackendTest\src\main\java\ru\gb\DTO\ProductDto.java
+D:\Users\Pavel\IdeaProjects\PVG_BackendTest\src\main\java\ru\gb\db\dao\CategoriesMapper.java
 D:\Users\Pavel\IdeaProjects\PVG_BackendTest\src\main\java\ru\gb\util\LoggingInterceptor.java
+D:\Users\Pavel\IdeaProjects\PVG_BackendTest\src\main\java\ru\gb\db\model\Products.java
+D:\Users\Pavel\IdeaProjects\PVG_BackendTest\src\main\java\ru\gb\db\model\ProductsExample.java
 D:\Users\Pavel\IdeaProjects\PVG_BackendTest\src\main\java\ru\gb\service\CategoryService.java
 D:\Users\Pavel\IdeaProjects\PVG_BackendTest\src\main\java\ru\gb\util\ConfigUtils.java
+D:\Users\Pavel\IdeaProjects\PVG_BackendTest\src\main\java\ru\gb\db\model\Categories.java
 D:\Users\Pavel\IdeaProjects\PVG_BackendTest\src\main\java\ru\gb\DTO\GetCategoryResponseDto.java
+D:\Users\Pavel\IdeaProjects\PVG_BackendTest\src\main\java\ru\gb\db\model\CategoriesExample.java
+D:\Users\Pavel\IdeaProjects\PVG_BackendTest\src\main\java\ru\gb\util\PrettyLogger.java
+D:\Users\Pavel\IdeaProjects\PVG_BackendTest\src\main\java\ru\gb\DTO\ProductDto.java
+D:\Users\Pavel\IdeaProjects\PVG_BackendTest\src\main\java\ru\gb\db\dao\ProductsMapper.java
 D:\Users\Pavel\IdeaProjects\PVG_BackendTest\src\main\java\ru\gb\util\ColouredSystemOutPrintln.java

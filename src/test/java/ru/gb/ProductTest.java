@@ -5,15 +5,17 @@ import io.qameta.allure.*;
 
 import lombok.SneakyThrows;
 import okhttp3.ResponseBody;
+
 import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.*;
 
 import retrofit2.Response;
 import ru.gb.DTO.ProductDto;
+import ru.gb.db.model.Products;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.*;
+import static ru.gb.util.ColouredSystemOutPrintln.*;
 
 public class ProductTest extends AbstractProductTest {
 
@@ -22,70 +24,36 @@ public class ProductTest extends AbstractProductTest {
     @Feature("Позитивное тестирование")
     @Description("Тестирование добавления товара с последующим удалением в существующую категорию")
     @Test
-    @DisplayName("Добавление нового товара в существующую категорию")
-    void createProductInFoodCategoryPositiveTest() {
-        Response<ProductDto> responsePost = productService
+    @DisplayName("Добавление нового товара")
+    void createProductPositiveTest() {
+
+        Response<ProductDto> response = productService
                 .createProduct(product)
                 .execute();
 
-        id = responsePost
+        id = response
                 .body()
                 .getId();
 
-        assertThat(responsePost.code(), equalTo(201));
-        assertThat(responsePost.isSuccessful(), CoreMatchers.is(true));
-        assertThat(responsePost.body().getCategoryTitle(), equalTo("Food"));
-        assertThat(responsePost.headers().toString(), containsString("Content-Type: application/json"));
-        assertThat(responsePost.headers().toString(), containsString("Transfer-Encoding: chunked"));
+        assertThat(response.isSuccessful(), CoreMatchers.is(true));
+        assertThat(response.code(), equalTo(201));
 
-        Response<ResponseBody> responseDel = productService
-                .deleteProduct(id)
-                .execute();
+        // Запросим в БД товар по полученному выше id
+        Products productFromDb = productsMapper.selectByPrimaryKey((long) id);
 
-        assertThat(responseDel.code(), equalTo(200));
-        assertThat(responseDel.isSuccessful(), CoreMatchers.is(true));
-        assertThat(responseDel.headers().toString(), containsString("Content-Length: 0"));
-    }
+        // Сравним имя товара, сгенерированного Faker, с именем товара, запрошенного в БД
+        assertThat(product.getTitle(), equalTo(productFromDb.getTitle()));
 
-    @SneakyThrows
-    @Epic("Тестирование товаров")
-    @Feature("Позитивное тестирование")
-    @Description("Тестирование изиенения добавленого товара с последующим его удалением в существующей категории")
-    @Test
-    @DisplayName("Изменение добавленного товара")
-    void modifyProductInFoodCategoryPositiveTest() {
-        Response<ProductDto> responsePost = productService
-                .createProduct(product)
-                .execute();
+        System.out.println(ANSI_BRIGHT_WHITE + "from faker: "
+                + ANSI_BRIGHT_CYAN + product.getTitle()
+                + ANSI_BRIGHT_WHITE + " from DB: "
+                + ANSI_BRIGHT_GREEN + productFromDb.getTitle() + ANSI_RESET);
 
-        id = responsePost
-                .body()
-                .getId();
+        // Удалим сгенерированный товар в БД и проверим на единичность удаленной записи
+        assertThat(productsMapper.deleteByPrimaryKey((long) id), equalTo(1));
 
-        assertThat(responsePost.code(), equalTo(201));
-        assertThat(responsePost.isSuccessful(), CoreMatchers.is(true));
-
-        Faker faker = new Faker();
-        Response<ProductDto> responsePut = productService
-                .modifyProduct(product
-                        .withId(id)
-                        .withTitle(faker.food().ingredient())
-                        .withPrice((int) (Math.random() * 10000)))
-                .execute();
-
-        assertThat(responsePut.code(), equalTo(200));
-        assertThat(responsePut.isSuccessful(), CoreMatchers.is(true));
-        assertThat(responsePut.body().getCategoryTitle(), equalTo("Food"));
-        assertThat(responsePut.headers().toString(), containsString("Content-Type: application/json"));
-        assertThat(responsePut.headers().toString(), containsString("Transfer-Encoding: chunked"));
-
-        Response<ResponseBody> responseDel = productService
-                .deleteProduct(id)
-                .execute();
-
-        assertThat(responseDel.code(), equalTo(200));
-        assertThat(responseDel.isSuccessful(), CoreMatchers.is(true));
-        assertThat(responseDel.headers().toString(), containsString("Content-Length: 0"));
+        // Проверим отсутствие удаленного товара в БД
+        assertThat(productsMapper.selectByPrimaryKey((long) id), equalTo(null));
     }
 
     @SneakyThrows
@@ -94,7 +62,8 @@ public class ProductTest extends AbstractProductTest {
     @Description("Тестирование просмотра добавленого товара с последующим его удалением в существующей категории")
     @Test
     @DisplayName("Просмотр добавленного товара")
-    void getProductInFoodCategoryPositiveTest() {
+    void getProductPositiveTest() {
+
         Response<ProductDto> responsePost = productService
                 .createProduct(product)
                 .execute();
@@ -103,115 +72,151 @@ public class ProductTest extends AbstractProductTest {
                 .body()
                 .getId();
 
-        assertThat(responsePost.code(), equalTo(201));
         assertThat(responsePost.isSuccessful(), CoreMatchers.is(true));
+        assertThat(responsePost.code(), equalTo(201));
 
         Response<ProductDto> responseGet = productService
                 .getProduct(id)
                 .execute();
 
-        assertThat(responseGet.code(), equalTo(200));
         assertThat(responseGet.isSuccessful(), CoreMatchers.is(true));
-        assertThat(responseGet.body().getCategoryTitle(), equalTo("Food"));
+        assertThat(responseGet.code(), equalTo(200));
         assertThat(responseGet.headers().toString(), containsString("Content-Type: application/json"));
         assertThat(responseGet.headers().toString(), containsString("Transfer-Encoding: chunked"));
+
+        // Запросим в БД товар по полученному выше id
+        Products productFromDb = productsMapper.selectByPrimaryKey((long) id);
+
+        //Особого смысла проверять GET параллельным запросом из базы нет, только ради баловства
+        assertThat(responseGet.body().getTitle(), equalTo(productFromDb.getTitle()));
+        assertThat(responseGet.body().getPrice(), equalTo(productFromDb.getPrice()));
+
+        System.out.println(ANSI_BRIGHT_WHITE + "from response: "
+                + ANSI_BRIGHT_CYAN + responseGet.body().getTitle() + ", " + responseGet.body().getPrice() + " rub"
+                + ANSI_BRIGHT_WHITE + " from DB: "
+                + ANSI_BRIGHT_GREEN + productFromDb.getTitle() + ", " + productFromDb.getPrice() + " rub"
+                + ANSI_RESET);
+
+        // Удалим сгенерированный товар в БД и проверим на единичность удаленной записи
+        assertThat(productsMapper.deleteByPrimaryKey((long) id), equalTo(1));
+
+        // Проверим отсутствие удаленного товара в БД
+        assertThat(productsMapper.selectByPrimaryKey((long) id), equalTo(null));
+    }
+
+    @SneakyThrows
+    @Epic("Тестирование товаров")
+    @Feature("Позитивное тестирование")
+    @Description("Тестирование изменения добавленого товара с последующим его удалением в существующей категории")
+    @Test
+    @DisplayName("Изменение добавленного товара")
+    void modifyProductPositiveTest() {
+
+        // Создадим предварительно в БД сгенерированный товар
+        Response<ProductDto> responsePost = productService
+                .createProduct(product)
+                .execute();
+
+        id = responsePost
+                .body()
+                .getId();
+
+        assertThat(responsePost.isSuccessful(), CoreMatchers.is(true));
+        assertThat(responsePost.code(), equalTo(201));
+
+        // Сгенерируем новый товар для последующих изменений в БД и подготовим данные для апдейта
+        Faker faker = new Faker();
+        String newTitle = faker.food().ingredient();
+        Integer newPrice = (int) (Math.random() * 1000);
+
+        // Проведем изменения в БД созданного товара значениями вновь сгенерированнного
+        Response<ProductDto> responsePut = productService
+                .modifyProduct(product
+                        .withId(id)
+                        .withTitle(newTitle)
+                        .withPrice(newPrice))
+                .execute();
+
+        assertThat(responsePut.isSuccessful(), CoreMatchers.is(true));
+        assertThat(responsePut.code(), equalTo(200));
+
+        // Запросим в БД товар по полученному выше id
+        Products productFromDb = productsMapper.selectByPrimaryKey((long) id);
+
+        // Сравним имя товара, сгенерированного Faker, с именем товара, запрошенного в БД
+        assertThat(newTitle, equalTo(productFromDb.getTitle()));
+        assertThat(newPrice, equalTo(productFromDb.getPrice()));
+
+        System.out.println(ANSI_BRIGHT_WHITE + "from Faker: "
+                + ANSI_BRIGHT_CYAN + newTitle + ", " + newPrice + " rub"
+                + ANSI_BRIGHT_WHITE + " from DB: "
+                + ANSI_BRIGHT_GREEN + productFromDb.getTitle() + ", " + productFromDb.getPrice() + " rub"
+                + ANSI_RESET);
+
+        // Удалим сгенерированный товар в БД и проверим на единичность удаленной записи
+        assertThat(productsMapper.deleteByPrimaryKey((long) id), equalTo(1));
+
+        // Проверим отсутствие удаленного товара в БД
+        assertThat(productsMapper.selectByPrimaryKey((long) id), equalTo(null));
+    }
+
+    @SneakyThrows
+    @Epic("Тестирование товаров")
+    @Feature("Позитивное тестирование")
+    @Description("Тестирование удаления ранее созданного в существующей категории товара")
+    @Test
+    @DisplayName("Удаление добавленного товара")
+    void deleteProductPositiveTest() {
+
+        // Создадим предварительно в БД сгенерированный товар
+        Response<ProductDto> responsePost = productService
+                .createProduct(product)
+                .execute();
+
+        id = responsePost
+                .body()
+                .getId();
+
+        assertThat(responsePost.isSuccessful(), CoreMatchers.is(true));
+        assertThat(responsePost.code(), equalTo(201));
+
+        // Не для смысла, а для баловства только
+        // Сгенерируем новый товар для последующих изменений в БД и подготовим данные для апдейта
+        Faker faker = new Faker();
+        String newTitle = faker.food().ingredient();
+        Integer newPrice = (int) (Math.random() * 1000);
+
+        Products newProduct = new Products();
+                newProduct.setId((long)id);
+                newProduct.setTitle(newTitle);
+                newProduct.setPrice(newPrice);
+                newProduct.setCategory_id(1L);
+
+        // Обновим товар в БД
+        productsMapper.updateByPrimaryKey(newProduct);
+
+        // Запросим в БД товар по полученному выше id
+        Products productFromDb = productsMapper.selectByPrimaryKey((long) id);
+
+        // Сравним имя товара, сгенерированного Faker, с именем товара, запрошенного в БД
+        assertThat(newTitle, equalTo(productFromDb.getTitle()));
+        assertThat(newPrice, equalTo(productFromDb.getPrice()));
+
+        System.out.println(ANSI_BRIGHT_WHITE + "from Faker: "
+                + ANSI_BRIGHT_CYAN + newTitle + ", " + newPrice + " rub"
+                + ANSI_BRIGHT_WHITE + " from DB: "
+                + ANSI_BRIGHT_GREEN + productFromDb.getTitle() + ", " + productFromDb.getPrice() + " rub"
+                + ANSI_RESET);
 
         Response<ResponseBody> responseDel = productService
                 .deleteProduct(id)
                 .execute();
 
-        assertThat(responseDel.code(), equalTo(200));
         assertThat(responseDel.isSuccessful(), CoreMatchers.is(true));
-        assertThat(responseDel.headers().toString(), containsString("Content-Length: 0"));
-    }
+        assertThat(responseDel.code(), equalTo(200));
 
-    @SneakyThrows
-    @Epic("Тестирование товаров")
-    @Feature("Негативное тестирование")
-    @Description("Тестирование добавления товара в несуществующую категорию")
-    @Test
-    @DisplayName("Добавление нового товара - несуществующая категория")
-    void createProductInAbsentCategoryNegativeTest() {
-        Response<ProductDto> response = productService
-                .createProduct(product.withCategoryTitle("absent"))
-                .execute();
-
-        assertThat(response.code(), equalTo(500));
-        assertThat(response.isSuccessful(), CoreMatchers.is(false));
-        assertThat(response.headers().toString(), containsString("Content-Type: application/json"));
-        assertThat(response.headers().toString(), containsString("Transfer-Encoding: chunked"));
-        assertThat(response.headers().toString(), containsString("Connection: close"));
-    }
-
-    @SneakyThrows
-    @Epic("Тестирование товаров")
-    @Feature("Негативное тестирование")
-    @Description("Тестирование добавления товара с указанием его ID")
-    @Test
-    @DisplayName("Добавление нового товара - с вводом ID")
-    void createProductWithIdNegativeTest() {
-        Response<ProductDto> response = productService
-                .createProduct(product.withId(1904))
-                .execute();
-
-        assertThat(response.code(), equalTo(400));
-        assertThat(response.isSuccessful(), CoreMatchers.is(false));
-        assertThat(response.headers().toString(), containsString("Content-Type: application/json"));
-        assertThat(response.headers().toString(), containsString("Transfer-Encoding: chunked"));
-        assertThat(response.headers().toString(), containsString("Connection: close"));
-    }
-
-    @SneakyThrows
-    @Epic("Тестирование товаров")
-    @Feature("Негативное тестирование")
-    @Description("Тестирование добавления товара, используя неверный путь")
-    @Test
-    @DisplayName("Добавление нового товара - ошибочный путь")
-    void createProductErrorPathNegativeTest() {
-        Response<ResponseBody> response = productService
-                .createProductErrorPath(product)
-                .execute();
-
-        assertThat(response.code(), equalTo(404));
-        assertThat(response.isSuccessful(), CoreMatchers.is(false));
-        assertThat(response.headers().toString(), containsString("Content-Type: application/json"));
-        assertThat(response.headers().toString(), containsString("Transfer-Encoding: chunked"));
-    }
-
-    @SneakyThrows
-    @Epic("Тестирование товаров")
-    @Feature("Негативное тестирование")
-    @Description("Тестирование добавления товара, используя путь от методов GET, DELETE")
-    @Test
-    @DisplayName("Добавление нового товара - ошибочный метод")
-    void createProductErrorMethodNegativeTest() {
-        Response<ResponseBody> response = productService
-                .createProductErrorMethod(product)
-                .execute();
-
-        assertThat(response.code(), equalTo(405));
-        assertThat(response.isSuccessful(), CoreMatchers.is(false));
-        assertThat(response.headers().toString(), containsString("Content-Type: application/json"));
-        assertThat(response.headers().toString(), containsString("Transfer-Encoding: chunked"));
-        assertThat(response.headers().toString(), containsString("Allow: DELETE, GET"));
-    }
-
-    @SneakyThrows
-    @Epic("Тестирование товаров")
-    @Feature("Негативное тестирование")
-    @Description("Тестирование добавления товара с пустым телом запроса")
-    @Test
-    @DisplayName("Добавление нового товара - пустой body")
-    void createProductAbsentBodyNegativeTest() {
-        Response<ResponseBody> response = productService
-                .createProductAbsentBody()
-                .execute();
-
-        assertThat(response.code(), equalTo(400));
-        assertThat(response.isSuccessful(), CoreMatchers.is(false));
-        assertThat(response.headers().toString(), containsString("Content-Type: application/json"));
-        assertThat(response.headers().toString(), containsString("Transfer-Encoding: chunked"));
-        assertThat(response.headers().toString(), containsString("Connection: close"));
+        // Проверим отсутствие удаленного товара в БД
+        assertThat(productsMapper.deleteByPrimaryKey((long) id), equalTo(0));
     }
 
     @SneakyThrows
@@ -219,66 +224,13 @@ public class ProductTest extends AbstractProductTest {
     @Feature("Негативное тестирование")
     @Description("Тестирование изменения несуществующего в маркете товара")
     @Test
-    @DisplayName("Изменение несуществующего товара")
+    @DisplayName("Изменение товара - несуществующий ID")
     void modifyProductInAbsentCategoryNegativeTest() {
         Response<ProductDto> response = productService
                 .modifyProduct(product.withId(-666))
                 .execute();
 
-        assertThat(response.code(), equalTo(400));
-        assertThat(response.isSuccessful(), CoreMatchers.is(false));
-        assertThat(response.headers().toString(), containsString("Content-Type: application/json"));
-        assertThat(response.headers().toString(), containsString("Transfer-Encoding: chunked"));
-        assertThat(response.headers().toString(), containsString("Connection: close"));
-    }
-
-    @SneakyThrows
-    @Epic("Тестирование товаров")
-    @Feature("Негативное тестирование")
-    @Description("Тестирование изменения товара, используя неверный путь")
-    @Test
-    @DisplayName("Изменение товара - ошибочный путь")
-    void modifyProductErrorPathNegativeTest() {
-        Response<ResponseBody> response = productService
-                .modifyProductErrorPath(product)
-                .execute();
-
-        assertThat(response.code(), equalTo(404));
-        assertThat(response.isSuccessful(), CoreMatchers.is(false));
-        assertThat(response.headers().toString(), containsString("Content-Type: application/json"));
-        assertThat(response.headers().toString(), containsString("Transfer-Encoding: chunked"));
-    }
-
-    @SneakyThrows
-    @Epic("Тестирование товаров")
-    @Feature("Негативное тестирование")
-    @Description("Тестирование изменения товара, используя путь от методов GET, DELETE")
-    @Test
-    @DisplayName("Изменение товара - ошибочный метод")
-    void modifyProductErrorMethodNegativeTest() {
-        Response<ResponseBody> response = productService
-                .modifyProductErrorMethod(product)
-                .execute();
-
-        assertThat(response.code(), equalTo(405));
-        assertThat(response.isSuccessful(), CoreMatchers.is(false));
-        assertThat(response.headers().toString(), containsString("Content-Type: application/json"));
-        assertThat(response.headers().toString(), containsString("Transfer-Encoding: chunked"));
-        assertThat(response.headers().toString(), containsString("Allow: DELETE, GET"));
-    }
-
-    @SneakyThrows
-    @Epic("Тестирование товаров")
-    @Feature("Негативное тестирование")
-    @Description("Тестирование изменения товара с пустым телом запроса")
-    @Test
-    @DisplayName("Изменение товара - пустой body")
-    void modifyProductAbsentBodyNegativeTest() {
-        Response<ResponseBody> response = productService
-                .modifyProductAbsentBody()
-                .execute();
-
-        assertThat(response.code(), equalTo(400));
+        assertThat(response.code(), equalTo(400)); // Здесь логичнее 404 код получать, так что это скорее всего баг
         assertThat(response.isSuccessful(), CoreMatchers.is(false));
         assertThat(response.headers().toString(), containsString("Content-Type: application/json"));
         assertThat(response.headers().toString(), containsString("Transfer-Encoding: chunked"));
@@ -295,137 +247,6 @@ public class ProductTest extends AbstractProductTest {
 
          Response<ProductDto> response = productService
                 .getProduct(-666)
-                .execute();
-
-        assertThat(response.code(), equalTo(404));
-        assertThat(response.isSuccessful(), CoreMatchers.is(false));
-        assertThat(response.headers().toString(), containsString("Content-Type: application/json"));
-        assertThat(response.headers().toString(), containsString("Transfer-Encoding: chunked"));
-    }
-
-    @SneakyThrows
-    @Epic("Тестирование товаров")
-    @Feature("Негативное тестирование")
-    @Description("Тестирование просмотра товара, используя невалидный ID неподходящего типа данных")
-    @Test
-    @DisplayName("Просмотр товара - невалидный ID")
-    void getProductNotValidIdNegativeTest() {
-
-        Response<ResponseBody> response = productService
-                .getProductNotValidId("ID")
-                .execute();
-
-        assertThat(response.code(), equalTo(400));
-        assertThat(response.isSuccessful(), CoreMatchers.is(false));
-        assertThat(response.headers().toString(), containsString("Content-Type: application/json"));
-        assertThat(response.headers().toString(), containsString("Transfer-Encoding: chunked"));
-        assertThat(response.headers().toString(), containsString("Connection: close"));
-    }
-
-    @SneakyThrows
-    @Epic("Тестирование товаров")
-    @Feature("Негативное тестирование")
-    @Description("Тестирование просмотра товара, не передавая ID")
-    @Test
-    @DisplayName("Просмотр товара - отсутствие ID")
-    void getProductAbsentIdNegativeTest() {
-
-        Response<ResponseBody> response = productService
-                .getProductAbsentId()
-                .execute();
-
-        assertThat(response.code(), equalTo(500));
-        assertThat(response.isSuccessful(), CoreMatchers.is(false));
-        assertThat(response.headers().toString(), containsString("Content-Type: application/json"));
-        assertThat(response.headers().toString(), containsString("Transfer-Encoding: chunked"));
-        assertThat(response.headers().toString(), containsString("Connection: close"));
-    }
-
-    @SneakyThrows
-    @Epic("Тестирование товаров")
-    @Feature("Негативное тестирование")
-    @Description("Тестирование просмотра товара, используя неверный путь")
-    @Test
-    @DisplayName("Просмотр товара - ошибочный путь")
-    void getProductErrorPathNegativeTest() {
-
-        Response<ResponseBody> response = productService
-                .getProductErrorPath()
-                .execute();
-
-        assertThat(response.code(), equalTo(404));
-        assertThat(response.isSuccessful(), CoreMatchers.is(false));
-        assertThat(response.headers().toString(), containsString("Content-Type: application/json"));
-        assertThat(response.headers().toString(), containsString("Transfer-Encoding: chunked"));
-    }
-
-    @SneakyThrows
-    @Epic("Тестирование товаров")
-    @Feature("Негативное тестирование")
-    @Description("Тестирование удаления товара, используя несуществующий ID")
-    @Test
-    @DisplayName("Удаление товара - несуществующий ID")
-    void deleteProductErrorIdNegativeTest() {
-
-        Response<ResponseBody> response = productService
-                .deleteProduct(-666)
-                .execute();
-
-        assertThat(response.code(), equalTo(500));
-        assertThat(response.isSuccessful(), CoreMatchers.is(false));
-        assertThat(response.headers().toString(), containsString("Content-Type: application/json"));
-        assertThat(response.headers().toString(), containsString("Transfer-Encoding: chunked"));
-        assertThat(response.headers().toString(), containsString("Connection: close"));
-    }
-
-    @SneakyThrows
-    @Epic("Тестирование товаров")
-    @Feature("Негативное тестирование")
-    @Description("Тестирование удаления товара, используя невалидный ID неподходящего типа данных")
-    @Test
-    @DisplayName("Удаление товара - невалидный ID")
-    void deleteProductNotValidIdNegativeTest() {
-
-        Response<ResponseBody> response = productService
-                .deleteProductNotValidId("ID")
-                .execute();
-
-        assertThat(response.code(), equalTo(400));
-        assertThat(response.isSuccessful(), CoreMatchers.is(false));
-        assertThat(response.headers().toString(), containsString("Content-Type: application/json"));
-        assertThat(response.headers().toString(), containsString("Transfer-Encoding: chunked"));
-        assertThat(response.headers().toString(), containsString("Connection: close"));
-    }
-
-    @SneakyThrows
-    @Epic("Тестирование товаров")
-    @Feature("Негативное тестирование")
-    @Description("Тестирование удаления товара, не передавая ID")
-    @Test
-    @DisplayName("Удаление товара - отсутствие ID")
-    void deleteProductAbsentIdNegativeTest() {
-
-        Response<ResponseBody> response = productService
-                .deleteProductAbsentID()
-                .execute();
-
-        assertThat(response.code(), equalTo(405));
-        assertThat(response.isSuccessful(), CoreMatchers.is(false));
-        assertThat(response.headers().toString(), containsString("Content-Type: application/json"));
-        assertThat(response.headers().toString(), containsString("Transfer-Encoding: chunked"));
-        assertThat(response.headers().toString(), containsString("Allow: POST, PUT, GET"));
-    }
-
-    @SneakyThrows
-    @Epic("Тестирование товаров")
-    @Feature("Негативное тестирование")
-    @Description("Тестирование удаления товара, используя неверный путь")
-    @Test
-    @DisplayName("Удаление товара - ошибочный путь")
-    void deleteProductErrorPathNegativeTest() {
-
-        Response<ResponseBody> response = productService
-                .getProductErrorPath()
                 .execute();
 
         assertThat(response.code(), equalTo(404));

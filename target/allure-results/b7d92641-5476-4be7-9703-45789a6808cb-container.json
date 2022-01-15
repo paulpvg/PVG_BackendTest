@@ -1,0 +1,1 @@
+{"uuid":"b7d92641-5476-4be7-9703-45789a6808cb","name":"Добавление нового товара","children":["e3edc0ad-a59f-4e14-9df1-c778fc3888f0"],"befores":[{"name":"setUp","status":"passed","stage":"finished","steps":[],"attachments":[],"parameters":[],"start":1642277984561,"stop":1642277984565}],"afters":[],"start":1642277984553,"stop":1642277984697}

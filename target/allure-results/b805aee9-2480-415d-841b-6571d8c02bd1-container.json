@@ -1,1 +1,0 @@
-{"uuid":"b805aee9-2480-415d-841b-6571d8c02bd1","name":"Добавление нового товара - несуществующая категория","children":["9be57a16-5902-41f5-9281-b851e941faf5"],"befores":[{"name":"setUp","status":"passed","stage":"finished","steps":[],"attachments":[],"parameters":[],"start":1641475331157,"stop":1641475331161}],"afters":[],"start":1641475331156,"stop":1641475331195}

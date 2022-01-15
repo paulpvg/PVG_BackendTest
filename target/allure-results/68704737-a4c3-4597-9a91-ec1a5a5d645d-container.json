@@ -1,1 +1,0 @@
-{"uuid":"68704737-a4c3-4597-9a91-ec1a5a5d645d","name":"Добавление нового товара - пустой body","children":["61f83bf8-b1d2-4b3b-b69c-ea9dd2b60c56"],"befores":[{"name":"setUp","status":"passed","stage":"finished","steps":[],"attachments":[],"parameters":[],"start":1641475805698,"stop":1641475805704}],"afters":[],"start":1641475805696,"stop":1641475805733}

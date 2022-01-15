@@ -1,0 +1,1 @@
+{"uuid":"e590bb87-7016-4ba9-8d7e-c12800045945","name":"Удаление добавленного товара","children":["e7019836-97d8-4d17-873b-b2cc0170a70f"],"befores":[{"name":"setUp","status":"passed","stage":"finished","steps":[],"attachments":[],"parameters":[],"start":1642277984236,"stop":1642277984245}],"afters":[],"start":1642277984233,"stop":1642277984410}

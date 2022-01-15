@@ -1,1 +1,0 @@
-{"uuid":"f2686ce8-b754-4455-83cb-cc337cdc96f6","name":"Удаление товара - несуществующий ID","children":["c87f0c26-bb6b-499d-a4f9-c9fa8f46c023"],"befores":[{"name":"setUp","status":"passed","stage":"finished","steps":[],"attachments":[],"parameters":[],"start":1641475618203,"stop":1641475618205}],"afters":[],"start":1641475618201,"stop":1641475618226}

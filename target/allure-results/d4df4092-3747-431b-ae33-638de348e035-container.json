@@ -1,1 +1,0 @@
-{"uuid":"d4df4092-3747-431b-ae33-638de348e035","name":"Просмотр товара - несуществующий ID","children":["e8dd931f-b276-41d4-8868-a90fb5b6f225"],"befores":[{"name":"setUp","status":"passed","stage":"finished","steps":[],"attachments":[],"parameters":[],"start":1641475331327,"stop":1641475331331}],"afters":[],"start":1641475331325,"stop":1641475331353}

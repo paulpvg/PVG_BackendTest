@@ -1,0 +1,1 @@
+{"uuid":"684dd97d-8fbc-4ae6-9d39-a87cf9e4c790","name":"Изменение товара - несуществующий ID","children":["f1d4ef5b-bfed-475a-9ce2-081f755a7b29"],"befores":[{"name":"setUp","status":"passed","stage":"finished","steps":[],"attachments":[],"parameters":[],"start":1642277984722,"stop":1642277984726}],"afters":[],"start":1642277984717,"stop":1642277984763}

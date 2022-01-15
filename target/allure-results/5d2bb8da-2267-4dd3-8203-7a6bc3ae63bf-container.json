@@ -1,1 +1,0 @@
-{"uuid":"5d2bb8da-2267-4dd3-8203-7a6bc3ae63bf","name":"Добавление нового товара - с вводом ID","children":["e2b1b4c5-0450-4ab7-933e-3a43e8b374ef"],"befores":[{"name":"setUp","status":"passed","stage":"finished","steps":[],"attachments":[],"parameters":[],"start":1641475805772,"stop":1641475805781}],"afters":[],"start":1641475805770,"stop":1641475805816}
